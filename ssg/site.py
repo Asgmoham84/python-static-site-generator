@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 
 
@@ -30,3 +31,7 @@ class Site:
                 self.create_dir(path)
             elif path.is_file():
                 self.run_parser(path)
+
+    @staticmethod
+    def error(message):
+        sys.stderr.write("\x1b[1;31m{}\n".format(message))
