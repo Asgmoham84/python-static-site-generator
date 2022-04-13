@@ -1,12 +1,11 @@
+@@ -0,0 +1,47 @@
 import re
-from yaml import FullLoader, load
 
 from collections.abc import Mapping
+from yaml import load, FullLoader
+
 
 class Content(Mapping):
-    def __init__(self, metadata, content):
-        self.data = metadata
-        self.data["content"] = content
     __delimiter = r"^(?:-|\+){3}\s*$"
     __regex = re.compile(__delimiter, re.MULTILINE)
 
@@ -15,6 +14,10 @@ class Content(Mapping):
         _, fm, content = cls.__regex.split(string, 2)
         metadata = load(fm, Loader=FullLoader)
         return cls(metadata, content)
+
+    def __init__(self, metadata, content):
+        self.data = metadata
+        self.data["content"] = content
 
     @property
     def body(self):
@@ -43,5 +46,3 @@ class Content(Mapping):
             if key != "content":
                 data[key] = value
         return str(data)
-
-
