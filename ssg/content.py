@@ -6,36 +6,42 @@ from collections.abc import Mapping
 class Content(Mapping):
     def __init__(self, metadata, content):
         self.data = metadata
-        self.data + {"content":content}
-    __delimiter = "^(?:-|\+){3}\s*$"
+        self.data["content"] = content
+    __delimiter = r"^(?:-|\+){3}\s*$"
     __regex = re.compile(__delimiter, re.MULTILINE)
 
-    def load(self, cls, string):
-        _, fm, content = self.__regex.split(string)[:2]
-        load(fm, Loader=FullLoader)
+    @classmethod
+    def load(cls, string):
+        _, fm, content = cls.__regex.split(string, 2)
+        metadata = load(fm, Loader=FullLoader)
         return cls(metadata, content)
 
-    class @property: load()
+    @property
+    def body(self):
         return self.data["content"]
 
-    class @property: type():
-        return self.data['type'] if "type" in self.data.keys() else None
+    @property
+    def type(self):
+        return self.data["type"] if "type" in self.data else None
+
+    @type.setter
+    def type(self, type):
+        self.data["type"] = type
 
     def __getitem__(self, key):
         return self.data[key]
 
     def __iter__(self):
-        return self.data
+        self.data.__iter__()
 
     def __len__(self):
         return len(self.data)
 
-    def __repr__():
+    def __repr__(self):
         data = {}
+        for key, value in self.data.items():
+            if key != "content":
+                data[key] = value
         return str(data)
-
-    for key, value in self.data.items():
-        if key != "content":
-            data[key] = value
 
 
